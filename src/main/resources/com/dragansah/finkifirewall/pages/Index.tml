@@ -1,0 +1,31 @@
+<html t:type="layout" title="filebrowser Index" t:sidebarTitle="Framework Version" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	xmlns:p="tapestry:parameter" xmlns:j="tapestry-library:jquery">
+
+	<table>
+		<tr>
+			<td style="vertical-align:top; ">
+				<h2>Лаборатории</h2>
+				<t:grid source="labs" row="lab">
+					<p:activeProfileCell>
+						<t:if test="lab.activeProfile">
+							${lab.activeProfile}
+							-
+							<t:eventLink t:id="removeLabProfile" t:context="lab">${message:delete}</t:eventLink>
+						</t:if>
+					</p:activeProfileCell>
+				</t:grid>
+			</td>
+			<td style="vertical-align:top; padding-left: 10px">
+				<h2>Профили</h2>
+				<t:grid source="profiles" row="profile" add="activate">
+					<p:activateCell>
+						<t:form t:id="activateProfileForm" t:context="profile">
+							<t:select model="labModel" encoder="labEncoder" value="selectedLab" onchange="this.form.submit()" />
+						</t:form>
+					</p:activateCell>
+				</t:grid>
+			</td>
+		</tr>
+	</table>
+
+</html>

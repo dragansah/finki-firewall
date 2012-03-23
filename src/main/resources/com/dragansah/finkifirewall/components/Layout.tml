@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>${title}</title>
+	</head>
+	<body>
+		<div id="wrap">
+			<a id="header" href="${indexPage}" style="text-decoration:none">
+				<div id="headerLeftPart"></div>
+				<div id="headerCenterPart">
+					<div style="padding: 20px 0 0 40px;font-size: 26px; color: white; float:left">${appServer}</div>
+					<div id="headerCenterPartTextBox" style="float:right; text-align:right">
+						Најавени сте како:
+						<strong>${username}</strong>
+						<br />
+						<t:eventLink t:id="logout">
+							Излез
+						</t:eventLink>
+					</div>
+				</div>
+				<div id="headerRightPart">
+				</div>
+			</a>
+
+			<div id="content">
+				<t:body />
+			</div>
+
+			<div class="push"><!--Sticky Footer Push -->
+			</div>
+		</div>
+
+		<footer>
+			<div id="footer">
+				<div id="footerLeftPart"></div>
+				<div id="footerRightPart"></div>
+				<div id="footerCenterPart">
+					<div id="footerCenterPartTextBox">
+						<div id="footerCopyright">
+						&copy;2012
+							<a href="http://www.finki.ukim.mk">Faculty of Computer
+								Science and Engineering
+							</a>
+						</div>
+						<div id="footerMenu">
+							<a href="#" t:type="PageLink" t:page="Index">Почетна</a>
+							|
+							<a href="#" t:type="PageLink" t:page="About">За Авторите</a>
+							|
+							<a href="#" t:type="PageLink" t:page="Help">Помош</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

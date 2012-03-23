@@ -1,0 +1,108 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter"
+	xmlns:j="tapestry-library:jquery">
+
+	<t:jquery.dialog t:clientId="uploadDialog"
+		params="literal:{title: 'Закачување на датотеки', width: 400px, max-height: 500px, modal: true, position: [400,100]}">
+		Големината на една датотека не смее да надминува 100 MB !
+		<p style="max-height: 200px">
+			<j:ajaxUpload t:id="uploadFile" t:multiple="true" t:sizeLimit="100M" />
+		</p>
+		<t:form t:id="uploadFilesForm">
+			<t:submit t:id="cancelSave" value="Затвори" />
+		</t:form>
+	</t:jquery.dialog>
+
+	<t:jquery.dialog t:clientId="createDirectoryDialog"
+		params="literal:{title: 'Нов директориум', modal: true, position: [400,100], max-width:500px}">
+		<t:form t:id="newDirectoryForm">
+			<p>
+				<t:label for="newDirectoryName">Назив: </t:label>
+				<t:textField t:id="newDirectoryName" value="newDirectoryName" />
+			</p>
+			<t:submit value="Зачувај" t:id="saveNewDirectory" />
+			<t:submit value="Откажи" t:id="cancelNewDirectory" />
+		</t:form>
+	</t:jquery.dialog>
+
+
+	<t:jquery.dialog t:clientId="deleteFileDialog"
+		params="literal:{title: 'Бришење', modal: true, position: [400,100], width: 500px}">
+		<t:zone t:id="deleteFileZone" update="show" />
+		<t:block t:id="deleteBlock">
+			<t:form t:id="deleteFileForm" context="fileForDelete">
+				<p style="text-align:justify">
+					<t:if test="fileforDelete.directory">
+						${message:are-you-sure-delete-folder}
+						<br />
+						<br />
+						<strong>"${fileForDelete.name}"</strong>
+						<p:else>
+							${message:are-you-sure-delete-file}
+							<strong>"${fileForDelete.name}" ?</strong>
+						</p:else>
+					</t:if>
+				</p>
+				<p>
+					${message:this-action-cannot-be-reversed}
+				</p>
+				<t:submit value="Избриши" t:id="deleteFile" />
+				<t:submit value="Откажи" t:id="cancelDeleteFile" />
+			</t:form>
+		</t:block>
+	</t:jquery.dialog>
+
+	<t:jquery.dialoglink t:dialog="uploadDialog" style="margin-right: 10px;">Закачи датотеки</t:jquery.dialoglink>
+	<t:jquery.dialoglink t:dialog="createDirectoryDialog">Нов директориум</t:jquery.dialoglink>
+
+	<t:zone t:id="mainZone" update="show">
+		Моментална локација:
+		<t:currentLocation currentDirectory="currentDirectory" topDirectory="topDirectory" />
+		<t:grid source="files" zone="^" row="file" rowsPerPage="10000" rowIndex="gridRowIndex" add="${gridColumns}">
+			<p:empty>
+				<p>Тековниот директориум е празен</p>
+			</p:empty>
+			<p:fileNameCell>
+				<t:if test="file.folder">
+					<t:eventLink event="browseFolder" context="file" zone="^">
+						<t:fileIcon file="file" />
+						${file.fileName}
+					</t:eventLink>
+					<p:else>
+						<t:eventLink event="downloadFile" context="file">
+							<t:fileIcon file="file" />
+							${file.fileName}
+						</t:eventLink>
+					</p:else>
+				</t:if>
+			</p:fileNameCell>
+
+			<p:fileSizeBytesCell>
+				${file.fileSizePrettyPrint}
+			</p:fileSizeBytesCell>
+
+			<p:extensionCell>
+				<t:if test="!file.folder">
+					${file.extension}
+				</t:if>
+			</p:extensionCell>
+
+
+			<p:deleteCell>
+				<div style="text-align: center">
+					<t:if test="!file.pointerToPrevDirectory">
+						<t:jquery.dialogAjaxLink t:id="deleteFileLink" dialog="deleteFileDialog" context="file"
+							zone="deleteFileZone">
+							<img src="${deleteIcon}" style="width: 16px; height: 16px" />
+						</t:jquery.dialogAjaxLink>
+					</t:if>
+				</div>
+			</p:deleteCell>
+
+			<p:linkCell>
+				<a href="${fileLink}">линк</a>
+			</p:linkCell>
+
+		</t:grid>
+	</t:zone>
+
+</t:container>

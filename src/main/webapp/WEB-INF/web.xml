@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+
+	<display-name>filebrowser Tapestry 5 Application</display-name>
+	<context-param>
+		<param-name>tapestry.app-package</param-name>
+		<param-value>com.dragansah.finkifirewall</param-value>
+	</context-param>
+<!-- 
+	<context-param>
+		<param-name>casServerLoginUrl</param-name>
+		<param-value>https://cas.finki.ukim.mk/cas/login
+			</param-value>
+	</context-param>
+	<context-param>
+		<param-name>casServerUrlPrefix</param-name>
+		<param-value>https://cas.finki.ukim.mk/cas</param-value>
+	</context-param>
+	<context-param>
+		<param-name>serverName</param-name>
+		<param-value>http://firewall.finki.ukim.mk/</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>CAS Validation Filter</filter-name>
+		<filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+ -->
+	<filter>
+		<filter-name>finkiFirewall</filter-name>
+		<filter-class>org.apache.tapestry5.TapestryFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>finkiFirewall</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+	</listener>
+
+</web-app>
+      

@@ -1,0 +1,17 @@
+[
+	{
+		"name" : "courses",
+		"description" : "Пристап до courses.finki.ukim.mk",
+		"iptables" : [
+						"iptables -I FORWARD -s ${ipClass} -d courses.finki.ukim.mk -j ACCEPT"
+					 ]
+	},
+	{
+		"name" : "courses, etest",
+		"description" : "Пристап до courses.finki.ukim.mk и etest.finki.ukim.mk",
+		"iptables" : 	[
+							"iptables -I FORWARD -s ${ipClass} -d courses.finki.ukim.mk -j ACCEPT",
+							"iptables -I FORWARD -s ${ipClass} -d etest.finki.ukim.mk -j ACCEPT"
+						]
+	}
+]

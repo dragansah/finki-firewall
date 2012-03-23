@@ -1,0 +1,9 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter"
+	xmlns:j="tapestry-library:jquery">
+
+	<t:loop source="directories" value="directory">
+		<t:eventLink t:id="changeDirectory" context="directory">${directory.name}</t:eventLink>
+		<span style="margin:0px 2px">/</span>
+	</t:loop>
+
+</t:container>
