@@ -209,6 +209,15 @@ public class FirewallServiceImpl implements FirewallService
 			throw new RuntimeException(e);
 		}
 
+		try
+		{
+			Runtime.getRuntime().exec("/etc/init.d/firewall restart");
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
