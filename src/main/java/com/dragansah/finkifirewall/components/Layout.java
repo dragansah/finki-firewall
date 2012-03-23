@@ -14,6 +14,7 @@
 
 package com.dragansah.finkifirewall.components;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -27,10 +28,13 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Session;
 
 import com.dragansah.finkifirewall.Constants;
 import com.dragansah.finkifirewall.pages.Index;
+import com.dragansah.finkifirewall.pages.NoAccess;
+import com.dragansah.finkifirewall.services.FirewallService;
 import com.dragansah.finkifirewall.sessionstate.UserInfo;
 
 @Import(stylesheet = "style.css")
@@ -49,6 +53,18 @@ public class Layout
 
 	@SessionState
 	private UserInfo userInfo;
+
+	@Inject
+	private FirewallService firewallService;
+
+	@Inject
+	private Response response;
+
+	void setupRender() throws IOException
+	{
+		if (!firewallService.userExists(userInfo.getUsername()))
+			response.sendRedirect(linkSource.createPageRenderLink(NoAccess.class));
+	}
 
 	public Link getIndexPage()
 	{

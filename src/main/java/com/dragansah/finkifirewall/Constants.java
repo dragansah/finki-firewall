@@ -26,5 +26,10 @@ public class Constants
 
 	public static final String CLEAR_OS_CONFIG_FILE_PATH = "clearos-config-file-path";
 
+	public static final String USERS_FILE_PATH = "users-file-path";
+
+	public static final String ADMIN_ROLE = "admin";
+	public static final String USER_ROLE = "user";
+
 	public static final CharSequence LAB_IPCLASS_TOKEN = "${ipClass}";
 }

@@ -15,7 +15,6 @@
 package com.dragansah.finkifirewall.services;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -30,18 +29,21 @@ import org.codehaus.jackson.map.type.TypeFactory;
 import com.dragansah.finkifirewall.Constants;
 import com.dragansah.finkifirewall.domain.FirewallProfile;
 import com.dragansah.finkifirewall.domain.Lab;
+import com.dragansah.finkifirewall.domain.User;
 
 public class FirewallServiceImpl implements FirewallService
 {
 	private Asset labsFile;
 	private Asset profilesFile;
 	private Asset clearOsConfigFile;
+	private Asset usersFile;
 
 	public FirewallServiceImpl(Map<String, Asset> config)
 	{
 		labsFile = config.get(Constants.LABS_FILE_PATH);
 		profilesFile = config.get(Constants.PROFILES_FILE_PATH);
 		clearOsConfigFile = config.get(Constants.CLEAR_OS_CONFIG_FILE_PATH);
+		usersFile = config.get(Constants.USERS_FILE_PATH);
 	}
 
 	@Override
@@ -54,6 +56,12 @@ public class FirewallServiceImpl implements FirewallService
 	public List<FirewallProfile> findAllFirewallProfiles()
 	{
 		return findAll(profilesFile, FirewallProfile.class);
+	}
+
+	@Override
+	public List<User> findAllUsers()
+	{
+		return findAll(usersFile, User.class);
 	}
 
 	@Override
@@ -107,7 +115,8 @@ public class FirewallServiceImpl implements FirewallService
 		selectedLab.setActiveProfile(profile.getName());
 		try
 		{
-			new ObjectMapper().writeValue(new File(labsFile.getResource().toURL().toURI()), labs);
+			new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(
+					new File(labsFile.getResource().toURL().toURI()), labs);
 		}
 		catch (Exception e)
 		{
@@ -142,22 +151,22 @@ public class FirewallServiceImpl implements FirewallService
 		StringBuilder sb = new StringBuilder();
 		for (Lab lab : findAllLabs())
 		{
-			if (!StringUtils.isBlank(lab.getActiveProfile()))
-			{
-				FirewallProfile profile = findFirewallProfileByName(lab.getActiveProfile());
-				if (profile == null)
-					throw new IllegalStateException("Firewall Profile must not be null");
+			if (StringUtils.isBlank(lab.getActiveProfile()))
+				continue;
 
-				sb.append(String.format("# profile for lab: %s is: %s", lab.getCode(),
-						profile.getName()));
-				sb.append("\n");
-				for (String iptables : profile.getIptables())
-				{
-					sb.append(iptables.replace(Constants.LAB_IPCLASS_TOKEN, lab.getIpClass()));
-					sb.append("\n");
-				}
+			FirewallProfile profile = findFirewallProfileByName(lab.getActiveProfile());
+			if (profile == null)
+				throw new IllegalStateException("Firewall Profile must not be null");
+
+			sb.append(String.format("# profile for lab: %s is: %s", lab.getCode(),
+					profile.getName()));
+			sb.append("\n");
+			for (String iptables : profile.getIptables())
+			{
+				sb.append(iptables.replace(Constants.LAB_IPCLASS_TOKEN, lab.getIpClass()));
 				sb.append("\n");
 			}
+			sb.append("\n");
 		}
 
 		sb.toString();
@@ -175,5 +184,18 @@ public class FirewallServiceImpl implements FirewallService
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	@Override
+	public boolean userExists(String username)
+	{
+		if (username == null)
+			return false;
+
+		for (User user : findAllUsers())
+			if (user.getUsername().equals(username))
+				return true;
+
+		return false;
 	}
 }

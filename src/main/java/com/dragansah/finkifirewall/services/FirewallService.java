@@ -21,6 +21,7 @@ import org.apache.tapestry5.ioc.annotations.UsesMappedConfiguration;
 
 import com.dragansah.finkifirewall.domain.FirewallProfile;
 import com.dragansah.finkifirewall.domain.Lab;
+import com.dragansah.finkifirewall.domain.User;
 
 @UsesMappedConfiguration(key = String.class, value = Asset.class)
 public interface FirewallService
@@ -36,4 +37,8 @@ public interface FirewallService
 	void setActiveProfileForLab(Lab selectedLab, FirewallProfile profile);
 
 	void removeLabProfile(Lab lab);
+
+	List<User> findAllUsers();
+	
+	boolean userExists(String username);
 }

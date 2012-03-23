@@ -12,25 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.dragansah.finkifirewall.sessionstate;
+package com.dragansah.finkifirewall.pages;
 
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.RequestGlobals;
-
-public class UserInfo
+public class NoAccess
 {
-	private final String username;
 
-	public UserInfo(@Inject RequestGlobals requestGlobals)
-	{
-		if (requestGlobals.getHTTPServletRequest().getRemoteUser() != null)
-			username = requestGlobals.getHTTPServletRequest().getRemoteUser();
-		else
-			username = "null";
-	}
-
-	public String getUsername()
-	{
-		return username;
-	}
 }
