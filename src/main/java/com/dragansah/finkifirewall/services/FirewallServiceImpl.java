@@ -36,6 +36,7 @@ public class FirewallServiceImpl implements FirewallService
 	private Asset labsFile;
 	private Asset profilesFile;
 	private Asset clearOsConfigFile;
+	private Asset clearOsStaticConfigFile;
 	private Asset usersFile;
 
 	public FirewallServiceImpl(Map<String, Asset> config)
@@ -43,6 +44,7 @@ public class FirewallServiceImpl implements FirewallService
 		labsFile = config.get(Constants.LABS_FILE_PATH);
 		profilesFile = config.get(Constants.PROFILES_FILE_PATH);
 		clearOsConfigFile = config.get(Constants.CLEAR_OS_CONFIG_FILE_PATH);
+		clearOsStaticConfigFile = config.get(Constants.CLEAR_OS_STATIC_CONFIG_FILE_PATH);
 		usersFile = config.get(Constants.USERS_FILE_PATH);
 	}
 
@@ -148,7 +150,30 @@ public class FirewallServiceImpl implements FirewallService
 
 	private void refreshClearOsProfile()
 	{
+		final String staticFileContents;
+		final String staticFileName;
+		try
+		{
+			staticFileContents = FileUtils.readFileToString(new File(clearOsStaticConfigFile
+					.getResource().toURL().toURI()));
+			staticFileName = clearOsStaticConfigFile.getResource().toURL().toURI().toString();
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (URISyntaxException e)
+		{
+			throw new RuntimeException(e);
+		}
+
 		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("# static file contents: %s", staticFileName));
+		sb.append("\n");
+		sb.append(staticFileContents);
+		sb.append("\n");
+		sb.append("#end static file contents");
+		sb.append("\n\n");
 		for (Lab lab : findAllLabs())
 		{
 			if (StringUtils.isBlank(lab.getActiveProfile()))

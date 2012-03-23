@@ -79,14 +79,17 @@ public class FinkiFirewallModule
 		final String clearOsConfigFilePath = System
 				.getProperty(Constants.CLEAR_OS_CONFIG_FILE_PATH);
 		final String usersFilePath = System.getProperty(Constants.USERS_FILE_PATH);
+		final String clearOsStaticConfigFilePath = System
+				.getProperty(Constants.CLEAR_OS_STATIC_CONFIG_FILE_PATH);
 
 		logger.debug("Contributing to FirewallService");
 		logger.debug("labsFilePath:" + labsFilePath);
 		logger.debug("profilesFilePath:" + profilesFilePath);
 		logger.debug("clearOsConfigFilePath:" + clearOsConfigFilePath);
+		logger.debug("clearOsStaticConfigFilePath:" + clearOsStaticConfigFilePath);
 		logger.debug("usersFilePath:" + usersFilePath);
 
-		Asset labsFile = null, profilesFile = null, clearOsConfigFile = null, usersFile = null;
+		Asset labsFile = null, profilesFile = null, clearOsConfigFile = null, clearOsStaticConfigFile = null, usersFile = null;
 
 		if (labsFilePath != null)
 			labsFile = fromFilePath(labsFilePath);
@@ -96,6 +99,9 @@ public class FinkiFirewallModule
 
 		if (clearOsConfigFilePath != null)
 			clearOsConfigFile = fromFilePath(clearOsConfigFilePath);
+		
+		if (clearOsStaticConfigFilePath != null)
+			clearOsStaticConfigFile = fromFilePath(clearOsStaticConfigFilePath);
 
 		if (usersFilePath != null)
 			usersFile = fromFilePath(usersFilePath);
@@ -111,14 +117,18 @@ public class FinkiFirewallModule
 			clearOsConfigFile = assetSource
 					.getClasspathAsset("com/dragansah/finkifirewall/clearos.config");
 
+		if (clearOsStaticConfigFilePath == null)
+			clearOsStaticConfigFile = assetSource
+					.getClasspathAsset("com/dragansah/finkifirewall/clearos-static.config");
+
 		if (usersFilePath == null)
-			usersFile = assetSource
-					.getClasspathAsset("com/dragansah/finkifirewall/users.json");
+			usersFile = assetSource.getClasspathAsset("com/dragansah/finkifirewall/users.json");
 
 		config.add(Constants.LABS_FILE_PATH, labsFile);
 		config.add(Constants.PROFILES_FILE_PATH, profilesFile);
 		config.add(Constants.CLEAR_OS_CONFIG_FILE_PATH, clearOsConfigFile);
 		config.add(Constants.USERS_FILE_PATH, usersFile);
+		config.add(Constants.CLEAR_OS_STATIC_CONFIG_FILE_PATH, clearOsStaticConfigFile);
 	}
 
 	private static Asset fromFilePath(final String filePath)

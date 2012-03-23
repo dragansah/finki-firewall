@@ -26,6 +26,8 @@ public class Constants
 
 	public static final String CLEAR_OS_CONFIG_FILE_PATH = "clearos-config-file-path";
 
+	public static final String CLEAR_OS_STATIC_CONFIG_FILE_PATH = "clearos-static-config-file-path";
+
 	public static final String USERS_FILE_PATH = "users-file-path";
 
 	public static final String ADMIN_ROLE = "admin";
