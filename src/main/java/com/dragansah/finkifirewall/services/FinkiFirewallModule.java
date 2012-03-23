@@ -76,11 +76,15 @@ public class FinkiFirewallModule
 	{
 		final String labsFilePath = System.getProperty(Constants.LABS_FILE_PATH);
 		final String profilesFilePath = System.getProperty(Constants.PROFILES_FILE_PATH);
+		final String clearOsConfigFilePath = System
+				.getProperty(Constants.CLEAR_OS_CONFIG_FILE_PATH);
+
 		logger.debug("Contributing to FirewallService");
 		logger.debug("labsFilePath:" + labsFilePath);
 		logger.debug("profilesFilePath:" + profilesFilePath);
+		logger.debug("clearOsConfigFilePath:" + clearOsConfigFilePath);
 
-		Asset labsFile = null, profilesFile = null;
+		Asset labsFile = null, profilesFile = null, clearOsConfigFile = null;
 
 		if (labsFilePath != null)
 			labsFile = fromFilePath(labsFilePath);
@@ -88,14 +92,23 @@ public class FinkiFirewallModule
 		if (profilesFilePath != null)
 			profilesFile = fromFilePath(profilesFilePath);
 
+		if (clearOsConfigFilePath != null)
+			clearOsConfigFile = fromFilePath(clearOsConfigFilePath);
+
 		if (labsFilePath == null)
 			labsFile = assetSource.getClasspathAsset("com/dragansah/finkifirewall/labs.json");
+
 		if (profilesFilePath == null)
 			profilesFile = assetSource
 					.getClasspathAsset("com/dragansah/finkifirewall/firewall-profiles.json");
 
+		if (clearOsConfigFilePath == null)
+			clearOsConfigFile = assetSource
+					.getClasspathAsset("com/dragansah/finkifirewall/clearos.config");
+
 		config.add(Constants.LABS_FILE_PATH, labsFile);
 		config.add(Constants.PROFILES_FILE_PATH, profilesFile);
+		config.add(Constants.CLEAR_OS_CONFIG_FILE_PATH, clearOsConfigFile);
 	}
 
 	private static Asset fromFilePath(final String filePath)

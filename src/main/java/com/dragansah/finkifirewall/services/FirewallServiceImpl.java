@@ -15,9 +15,14 @@
 package com.dragansah.finkifirewall.services;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.Asset;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.TypeFactory;
@@ -29,13 +34,14 @@ import com.dragansah.finkifirewall.domain.Lab;
 public class FirewallServiceImpl implements FirewallService
 {
 	private Asset labsFile;
-
 	private Asset profilesFile;
+	private Asset clearOsConfigFile;
 
 	public FirewallServiceImpl(Map<String, Asset> config)
 	{
 		labsFile = config.get(Constants.LABS_FILE_PATH);
 		profilesFile = config.get(Constants.PROFILES_FILE_PATH);
+		clearOsConfigFile = config.get(Constants.CLEAR_OS_CONFIG_FILE_PATH);
 	}
 
 	@Override
@@ -127,11 +133,47 @@ public class FirewallServiceImpl implements FirewallService
 		{
 			throw new RuntimeException(e);
 		}
+
 		refreshClearOsProfile();
 	}
 
 	private void refreshClearOsProfile()
 	{
+		StringBuilder sb = new StringBuilder();
+		for (Lab lab : findAllLabs())
+		{
+			if (!StringUtils.isBlank(lab.getActiveProfile()))
+			{
+				FirewallProfile profile = findFirewallProfileByName(lab.getActiveProfile());
+				if (profile == null)
+					throw new IllegalStateException("Firewall Profile must not be null");
+
+				sb.append(String.format("# profile for lab: %s is: %s", lab.getCode(),
+						profile.getName()));
+				sb.append("\n");
+				for (String iptables : profile.getIptables())
+				{
+					sb.append(iptables.replace(Constants.LAB_IPCLASS_TOKEN, lab.getIpClass()));
+					sb.append("\n");
+				}
+				sb.append("\n");
+			}
+		}
+
+		sb.toString();
+		try
+		{
+			FileUtils.write(new File(clearOsConfigFile.getResource().toURL().toURI()),
+					sb.toString());
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (URISyntaxException e)
+		{
+			throw new RuntimeException(e);
+		}
 
 	}
 }
