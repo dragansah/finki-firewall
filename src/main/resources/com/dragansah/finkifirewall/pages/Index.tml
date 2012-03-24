@@ -1,5 +1,5 @@
-<html t:type="layout" title="filebrowser Index" t:sidebarTitle="Framework Version" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-	xmlns:p="tapestry:parameter" xmlns:j="tapestry-library:jquery">
+<html t:type="layout" title="FINKI Firewall" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	xmlns:p="tapestry:parameter">
 
 	<table>
 		<tr>
