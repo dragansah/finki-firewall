@@ -18,7 +18,7 @@ public class Constants
 {
 	public static final String CAS_SERVER = "https://cas.finki.ukim.mk";
 
-	public static final String APP_SERVER = "firewall.finki.ukim.mk";
+	public static final String APP_SERVER = "fw-finki.finki.ukim.mk";
 
 	public static final String LABS_FILE_PATH = "labs-file-path";
 
