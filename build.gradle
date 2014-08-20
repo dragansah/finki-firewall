@@ -16,65 +16,16 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-
-    // All things JBoss/Hibernate
-    mavenRepo name: "JBoss", urls: "http://repository.jboss.org/nexus/content/groups/public/"
-
-    // For stable versions of the tapx libraries
-    mavenRepo name: "HLS", urls: "http://howardlewisship.com/repository/"
-
-    // For non-stable versions of the tapx libraries
-    mavenRepo name: "HLS Snapshots", urls: "http://howardlewisship.com/snapshot-repository/"
-
-    // For access to Apache Staging (Preview) packages
-    mavenRepo name: "Apache Staging", urls: "https://repository.apache.org/content/groups/staging"
-    
-    mavenRepo name: "Tapestry5 JQuery", urls: "http://nexus.devlab722.net/nexus/content/repositories/snapshots"
-}
-
-// This simulates Maven's "provided" scope, until it is officially supported by Gradle
-// See http://jira.codehaus.org/browse/GRADLE-784
-
-configurations {
-    provided
-}
-
-sourceSets {
-    main {
-        compileClasspath += configurations.provided
-    }
-    test {
-        compileClasspath += configurations.provided
-        runtimeClasspath += configurations.provided
-    }
+		maven { url "http://nexus.devlab722.net/nexus/content/repositories/releases" }
 }
 
 dependencies {
 
-    compile "org.apache.tapestry:tapestry-core:5.3.2"
+    compile "org.apache.tapestry:tapestry-core:5.3.7"
     compile "org.codehaus.jackson:jackson-mapper-lgpl:1.9.5"
     compile "org.codehaus.jackson:jackson-core-lgpl:1.9.5"
-    compile "org.got5:tapestry5-jquery:3.2.1-SNAPSHOT"
+    compile "org.got5:tapestry5-jquery:3.2.1"
+    compile "javax.servlet:servlet-api:2.5"
     compile "commons-io:commons-io:1.3.2"
-    compile "org.jasig.cas.client:cas-client-core:3.2.1"
-
-    // This adds automatic compression of JavaScript and CSS in production mode:
-    compile "org.apache.tapestry:tapestry-yuicompressor:5.3.2"
-
-    provided "javax.servlet:servlet-api:2.5"
-}
-
-test {
-    useTestNG()
-
-    options.suites("src/test/conf/testng.xml")
-
-    systemProperties["tapestry.service-reloading-enabled"] = "false"
-    systemProperties["tapestry.execution-mode"] = "development"
-
-    maxHeapSize = "600M"
-
-    jvmArgs("-XX:MaxPermSize=256M")
-
-    enableAssertions = true
+    compile "org.apache.tapestry:tapestry-yuicompressor:5.3.7"
 }
